@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receiver Search</title>
+    <link rel="icon" href="../assets/logos/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../styles/animations.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"], button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background-color: #45a049;
+        }
+        #donorList {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .donor-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .donor-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .donor-info {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .donor-info div {
+            flex: 1 0 50%;
+            margin-bottom: 5px;
+        }
+        .export-btn {
+            background-color: #2196F3;
+            margin-top: 10px;
+        }
+        .export-btn:hover {
+            background-color: #0b7dda;
+        }
+        .donor-checkbox {
+            width: auto;
+            margin-right: 10px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+        .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .back-btn {
+            background-color: #f44336;
+        }
+        .back-btn:hover {
+            background-color: #d32f2f;
+        }
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+        .error {
+            color: #f44336;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Receiver Information and Donor Search</h1>
+    <form id="searchForm">
+        <h2>Your Location:</h2>
+        <label for="receiverState">State:</label>
+        <select id="receiverState" name="state" required>
+            <option value="">Select State</option>
+        </select>
+        
+        <label for="receiverDistrict">District:</label>
+        <select id="receiverDistrict" name="district" required>
+            <option value="">Select District</option>
+        </select>
+        
+        <label for="receiverVillage">Village Name:</label>
+        <input type="text" id="receiverVillage" name="village">
+        
+        <label for="receiverBloodGroup">Blood Group Needed:</label>
+        <select id="receiverBloodGroup" name="blood_group" required>
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+        
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        
+        <input type="submit" value="Find Donors">
+    </form>
+
+    <h2>Available Donors:</h2>
+    <div id="donorList">
+        <p>No donors found yet. Please enter criteria and click 'Find Donors'.</p>
+    </div>
+    
+    <div class="actions">
+        <button id="exportPdfBtn" class="export-btn" style="display: none;">Export Selected to PDF</button>
+        <button class="back-btn" onclick="window.location.href='./Home.html'">Back to Home</button>
+    </div>
+
+    <script src="../components/india_states.js"></script>
+    <script>
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        // Redirect to login if not authenticated
+        if (!token) {
+            window.location.href = '../pages/Login.html';
+        }
+        
+        // Initialize state and district dropdowns
+        populateStates('receiverState');
+        
+        // Add event listener to state dropdown to update district dropdown
+        document.getElementById('receiverState').addEventListener('change', function() {
+            populateDistricts('receiverState', 'receiverDistrict');
+        });
+        
+        // DOM elements
+        const searchForm = document.getElementById('searchForm');
+        const donorList = document.getElementById('donorList');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Selected donor IDs for PDF export
+        let selectedDonorIds = [];
+        
+        // Handle form submission
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading message
+            donorList.innerHTML = `
+                <div class="loading-container">
+                    <img src="../assets/animations/blood-drop-loading.svg" alt="Loading..." class="loading-animation">
+                    <p>Searching for donors...</p>
+                </div>
+            `;
+            
+            // Get form data
+            const formData = new FormData(searchForm);
+            const searchParams = {};
+            
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    searchParams[key] = value;
+                }
+            }
+            
+            // Add is_available parameter
+            searchParams.is_available = true;
+            
+            try {
+                // Build query string
+                const queryParams = new URLSearchParams();
+                for (const key in searchParams) {
+                    queryParams.append(key, searchParams[key]);
+                }
+                
+                // Make API request
+                const response = await fetch(`http://localhost:8000/donors/search/?${queryParams}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to search donors');
+                }
+                
+                const donors = await response.json();
+                
+                // Reset selected donor IDs
+                selectedDonorIds = [];
+                
+                // Display donors
+                if (donors.length === 0) {
+                    donorList.innerHTML = '<p>No donors found matching your criteria.</p>';
+                    exportPdfBtn.style.display = 'none';
+                } else {
+                    let html = '';
+                    
+                    donors.forEach(donor => {
+                        html += `
+                            <div class="donor-card">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="donor-checkbox" data-donor-id="${donor.id}">
+                                    <h3>${donor.name}</h3>
+                                </label>
+                                <div class="donor-info">
+                                    <div><strong>Blood Group:</strong> ${donor.blood_group}</div>
+                                    <div><strong>Gender:</strong> ${donor.gender}</div>
+                                    <div><strong>Mobile:</strong> ${donor.phone_number}</div>
+                                    <div><strong>Location:</strong> ${donor.village}, ${donor.district}, ${donor.state}</div>
+                                    <div><strong>Pincode:</strong> ${donor.pincode}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    donorList.innerHTML = html;
+                    exportPdfBtn.style.display = 'block';
+                    
+                    // Add event listeners to checkboxes
+                    document.querySelectorAll('.donor-checkbox').forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const donorId = parseInt(this.getAttribute('data-donor-id'));
+                            
+                            if (this.checked) {
+                                selectedDonorIds.push(donorId);
+                            } else {
+                                selectedDonorIds = selectedDonorIds.filter(id => id !== donorId);
+                            }
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error searching donors:', error);
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+                donorList.innerHTML = '<p>An error occurred while searching for donors.</p>';
+                exportPdfBtn.style.display = 'none';
+            }
+        });
+        
+        // Handle PDF export
+        exportPdfBtn.addEventListener('click', async () => {
+            if (selectedDonorIds.length === 0) {
+                alert('Please select at least one donor to export.');
+                return;
+            }
+            
+            try {
+                // Make API request to export PDF
+                const response = await fetch('http://localhost:8000/export/donors-pdf/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        donor_ids: selectedDonorIds,
+                        title: 'Donor List',
+                        include_contact_info: true
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to export PDF');
+                }
+                
+                // Get PDF blob
+                const pdfBlob = await response.blob();
+                
+                // Create download link
+                const url = window.URL.createObjectURL(pdfBlob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `donor_list_${new Date().toISOString().split('T')[0]}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error exporting PDF:', error);
+                alert('An error occurred while exporting the PDF: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

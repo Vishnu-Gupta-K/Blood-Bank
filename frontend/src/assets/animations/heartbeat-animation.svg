@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <style>
+    @keyframes pulse {
+      0% { stroke-width: 2; }
+      50% { stroke-width: 4; }
+      100% { stroke-width: 2; }
+    }
+    
+    @keyframes draw {
+      0% { stroke-dashoffset: 1000; }
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    .heartbeat-line {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+      animation: draw 3s ease-in-out infinite, pulse 3s ease-in-out infinite;
+    }
+    
+    .heart {
+      animation: fadeIn 0.5s ease-in-out forwards;
+      opacity: 0;
+      animation-delay: 2s;
+    }
+  </style>
+  
+  <!-- Background Grid -->
+  <rect width="400" height="200" fill="#f8f9fa"/>
+  <path d="M0 100 H400" stroke="#ddd" stroke-width="1"/>
+  <path d="M0 50 H400" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+  <path d="M0 150 H400" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Heartbeat Line -->
+  <path class="heartbeat-line" d="M0 100 L50 100 L70 100 L80 70 L100 130 L120 70 L140 130 L160 100 L180 100 L200 40 L220 160 L240 100 L260 100 L280 100 L300 100 L320 100 L340 100 L360 100 L400 100" 
+        fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Heart Icon -->
+  <path class="heart" d="M350 80 Q360 65 370 80 T390 80 Q390 95 370 110 Q350 125 330 110 Q310 95 310 80 Q310 65 320 80 T330 80 Z" 
+        fill="#e74c3c" opacity="0"/>
+</svg>

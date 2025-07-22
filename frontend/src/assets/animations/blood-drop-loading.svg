@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    @keyframes drip {
+      0% { transform: translateY(-10px); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(50px); opacity: 0; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .drop {
+      animation: pulse 2s infinite ease-in-out;
+      transform-origin: center;
+    }
+    
+    .drip-1 {
+      animation: drip 2s infinite;
+      animation-delay: 0s;
+    }
+    
+    .drip-2 {
+      animation: drip 2s infinite;
+      animation-delay: 0.7s;
+    }
+    
+    .drip-3 {
+      animation: drip 2s infinite;
+      animation-delay: 1.4s;
+    }
+  </style>
+  
+  <!-- Main Blood Drop -->
+  <path class="drop" d="M50 10 C45 40 30 60 30 75 C30 88 39 95 50 95 C61 95 70 88 70 75 C70 60 55 40 50 10 Z" fill="#e74c3c"/>
+  
+  <!-- Highlight -->
+  <path d="M40 75 C40 60 45 40 48 20 C45 40 40 60 40 75 C40 82 43 88 50 92 C43 88 40 82 40 75 Z" fill="#fff" opacity="0.3"/>
+  
+  <!-- Drips -->
+  <circle class="drip-1" cx="50" cy="10" r="5" fill="#e74c3c"/>
+  <circle class="drip-2" cx="40" cy="15" r="3" fill="#e74c3c"/>
+  <circle class="drip-3" cx="60" cy="12" r="4" fill="#e74c3c"/>
+</svg>

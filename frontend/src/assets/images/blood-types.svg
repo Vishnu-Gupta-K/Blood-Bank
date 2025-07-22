@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#333">Blood Types Compatibility Chart</text>
+  
+  <!-- Blood Type Circles -->
+  <!-- A+ -->
+  <circle cx="200" cy="150" r="50" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <text x="200" y="160" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">A+</text>
+  
+  <!-- A- -->
+  <circle cx="350" cy="150" r="50" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <text x="350" y="160" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">A-</text>
+  
+  <!-- B+ -->
+  <circle cx="500" cy="150" r="50" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+  <text x="500" y="160" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">B+</text>
+  
+  <!-- B- -->
+  <circle cx="650" cy="150" r="50" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+  <text x="650" y="160" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">B-</text>
+  
+  <!-- AB+ -->
+  <circle cx="200" cy="300" r="50" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+  <text x="200" y="310" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">AB+</text>
+  
+  <!-- AB- -->
+  <circle cx="350" cy="300" r="50" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+  <text x="350" y="310" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">AB-</text>
+  
+  <!-- O+ -->
+  <circle cx="500" cy="300" r="50" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+  <text x="500" y="310" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">O+</text>
+  
+  <!-- O- -->
+  <circle cx="650" cy="300" r="50" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+  <text x="650" y="310" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#fff">O-</text>
+  
+  <!-- Compatibility Lines -->
+  <!-- Universal Recipient (AB+) -->
+  <path d="M200 350 L200 400 L400 400" stroke="#333" stroke-width="2" fill="none"/>
+  <text x="420" y="405" font-family="Arial, sans-serif" font-size="16" fill="#333">Universal Recipient (can receive from all types)</text>
+  
+  <!-- Universal Donor (O-) -->
+  <path d="M650 350 L650 430 L400 430" stroke="#333" stroke-width="2" fill="none"/>
+  <text x="380" y="435" font-family="Arial, sans-serif" font-size="16" text-anchor="end" fill="#333">Universal Donor (can donate to all types)</text>
+  
+  <!-- Legend -->
+  <rect x="100" y="460" width="600" height="30" fill="#f5f5f5" rx="5" ry="5" stroke="#ddd" stroke-width="1"/>
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">Blood type compatibility is crucial for safe transfusions</text>
+</svg>
