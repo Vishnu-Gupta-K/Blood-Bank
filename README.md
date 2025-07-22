@@ -1,5 +1,7 @@
 # Blood Bank Management System
 
+
+
 ## Overview
 This project is a Blood Bank Management System designed to streamline the process of connecting blood donors with recipients. It provides a web-based interface for managing donor and recipient information, blood requests, and donation records. The system utilizes a FastAPI backend for API services and a modern frontend for user interaction, with data stored in a MySQL database.
 
@@ -206,3 +208,9 @@ For project structure details, refer to the Project Structure section above.
 2. Create a new branch for your feature
 3. Make your changes
 4. Submit a pull request
+
+## Author
+This project was developed by Vishnu Gupta Karapakula
+Email: [mvsstccscsavas@gmail.com]
+GitHub: [Vishnu-Gupta-K](https://github.com/Vishnu-Gupta-K/)
+LinkedIn: [Vishnu Gupta Karapakula](https://www.linkedin.com/in/vishnu-gupta-karapakula-a89409272/)
