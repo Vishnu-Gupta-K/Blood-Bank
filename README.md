@@ -211,6 +211,9 @@ For project structure details, refer to the Project Structure section above.
 
 ## Author
 This project was developed by Vishnu Gupta Karapakula
-Email: [mvsstccscsavas@gmail.com]
+
+Email: mvsstccscsavas@gmail.com
+
 GitHub: [Vishnu-Gupta-K](https://github.com/Vishnu-Gupta-K/)
+
 LinkedIn: [Vishnu Gupta Karapakula](https://www.linkedin.com/in/vishnu-gupta-karapakula-a89409272/)
