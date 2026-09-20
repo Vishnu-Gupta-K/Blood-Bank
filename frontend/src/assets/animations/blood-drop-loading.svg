@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    @keyframes drip {
+      0% { transform: translateY(-10px) scale(0.8); opacity: 0; filter: drop-shadow(0 0 0 rgba(231, 76, 60, 0)); }
+      20% { opacity: 1; transform: translateY(10px) scale(1); filter: drop-shadow(0 3px 3px rgba(231, 76, 60, 0.3)); }
+      80% { opacity: 1; filter: drop-shadow(0 5px 5px rgba(231, 76, 60, 0.5)); }
+      100% { transform: translateY(60px) scale(0.9); opacity: 0; filter: drop-shadow(0 2px 2px rgba(231, 76, 60, 0.2)); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(231, 76, 60, 0.3)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(231, 76, 60, 0.5)); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(231, 76, 60, 0.3)); }
+    }
+    
+    @keyframes flow {
+      0% { opacity: 0.2; }
+      50% { opacity: 0.5; }
+      100% { opacity: 0.2; }
+    }
+    
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .drop {
+      animation: pulse 2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+      transform-origin: center;
+      filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.4));
+    }
+    
+    .flow-effect {
+      animation: flow 3s infinite ease-in-out alternate;
+    }
+    
+    .drip-1 {
+      animation: drip 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-delay: 0s;
+    }
+    
+    .drip-2 {
+      animation: drip 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-delay: 0.8s;
+    }
+    
+    .drip-3 {
+      animation: drip 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-delay: 1.6s;
+    }
+    
+    .spinner {
+      animation: rotate 8s infinite linear;
+      transform-origin: center;
+      opacity: 0.7;
+    }
+  </style>
+  
+  <!-- Background Circle -->
+  <circle class="spinner" cx="50" cy="50" r="45" fill="none" stroke="#f8f9fa" stroke-width="1" stroke-dasharray="3,3" />
+  
+  <!-- Main Blood Drop with Gradient -->
+  <defs>
+    <linearGradient id="dropGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e74c3c" />
+      <stop offset="100%" stop-color="#c0392b" />
+    </linearGradient>
+  </defs>
+  
+  <path class="drop" d="M50 10 C45 40 30 60 30 75 C30 88 39 95 50 95 C61 95 70 88 70 75 C70 60 55 40 50 10 Z" fill="url(#dropGradient)"/>
+  
+  <!-- Inner Highlight with Animation -->
+  <path class="flow-effect" d="M40 75 C40 60 45 40 48 20 C45 40 40 60 40 75 C40 82 43 88 50 92 C43 88 40 82 40 75 Z" fill="#fff" opacity="0.3"/>
+  
+  <!-- Shine Effect -->
+  <path d="M35 75 C35 55 40 35 45 15 C42 35 37 55 37 75 C37 85 42 90 50 92 C42 90 35 85 35 75 Z" fill="#fff" opacity="0.2"/>
+  
+  <!-- Drips with Enhanced Style -->
+  <g filter="url(#dropShadow)">
+    <defs>
+      <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+        <feOffset dx="0" dy="2" result="offsetblur" />
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.5" />
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    
+    <!-- Stylized Drips -->
+    <path class="drip-1" d="M50 10 L50 15 C50 17.5 52.5 20 55 20 C57.5 20 60 17.5 60 15 L60 12 Z" fill="url(#dropGradient)"/>
+    <path class="drip-2" d="M40 15 L40 20 C40 22.5 42.5 25 45 25 C47.5 25 50 22.5 50 20 L50 17 Z" fill="url(#dropGradient)"/>
+    <path class="drip-3" d="M60 12 L60 17 C60 19.5 62.5 22 65 22 C67.5 22 70 19.5 70 17 L70 14 Z" fill="url(#dropGradient)"/>
+  </g>
+  
+  <!-- Pulse Rings -->
+  <circle cx="50" cy="50" r="35" fill="none" stroke="#e74c3c" stroke-width="0.5" opacity="0.3" class="pulse" />
+</svg>

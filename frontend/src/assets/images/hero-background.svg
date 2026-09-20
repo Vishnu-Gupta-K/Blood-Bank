@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#c0392b" stop-opacity="0.9"/>
+    </linearGradient>
+    
+    <pattern id="pattern-circles" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="30" r="15" fill="#fff" fill-opacity="0.05"/>
+    </pattern>
+  </defs>
+  
+  <!-- Main Background -->
+  <rect width="1920" height="1080" fill="url(#bg-gradient)"/>
+  
+  <!-- Pattern Overlay -->
+  <rect width="1920" height="1080" fill="url(#pattern-circles)"/>
+  
+  <!-- Blood Cells (White) -->
+  <circle cx="300" cy="200" r="80" fill="#fff" fill-opacity="0.1"/>
+  <circle cx="1600" cy="300" r="100" fill="#fff" fill-opacity="0.1"/>
+  <circle cx="500" cy="800" r="120" fill="#fff" fill-opacity="0.1"/>
+  <circle cx="1200" cy="700" r="90" fill="#fff" fill-opacity="0.1"/>
+  <circle cx="1000" cy="200" r="70" fill="#fff" fill-opacity="0.1"/>
+  <circle cx="1700" cy="900" r="110" fill="#fff" fill-opacity="0.1"/>
+  
+  <!-- Blood Drops -->
+  <path d="M400 100 C390 150 350 200 350 250 C350 300 375 350 400 350 C425 350 450 300 450 250 C450 200 410 150 400 100 Z" fill="#fff" fill-opacity="0.2"/>
+  <path d="M1500 200 C1490 250 1450 300 1450 350 C1450 400 1475 450 1500 450 C1525 450 1550 400 1550 350 C1550 300 1510 250 1500 200 Z" fill="#fff" fill-opacity="0.15" transform="scale(0.8)"/>
+  <path d="M800 600 C790 650 750 700 750 750 C750 800 775 850 800 850 C825 850 850 800 850 750 C850 700 810 650 800 600 Z" fill="#fff" fill-opacity="0.25" transform="scale(0.7)"/>
+  
+  <!-- Abstract Wave -->
+  <path d="M0 800 C400 700 800 900 1200 800 C1600 700 1920 850 1920 850 L1920 1080 L0 1080 Z" fill="#fff" fill-opacity="0.05"/>
+  
+  <!-- Subtle Heartbeat Line -->
+  <path d="M0 540 L640 540 L700 480 L760 600 L820 400 L880 680 L940 540 L1920 540" stroke="#fff" stroke-opacity="0.2" stroke-width="3" fill="none"/>
+</svg>

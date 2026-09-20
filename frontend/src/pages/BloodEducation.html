@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Education - Blood Bank</title>
+    <link rel="icon" href="../assets/logos/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../styles/animations.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #f8d7da;
+            --secondary-color: #3498db;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
+            --transition-fast: 0.3s;
+            --transition-medium: 0.5s;
+            --transition-slow: 0.8s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles with Animation */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: pulse 8s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-logo {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            transition: transform var(--transition-medium);
+        }
+
+        .header-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInRight 1s ease-out;
+        }
+
+        /* Container and Section Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .education-section {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .education-section h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .education-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        .education-section p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .blood-types-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .blood-education-svg {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .blood-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .blood-type-card {
+            background-color: var(--bg-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blood-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .blood-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .blood-type-card h3 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blood-type-icon {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .blood-type-card ul {
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .blood-type-card li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .compatibility-section {
+            margin-top: 3rem;
+        }
+
+        .compatibility-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .compatibility-table th,
+        .compatibility-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .compatibility-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .compatibility-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .compatibility-table .compatible {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .compatibility-table .incompatible {
+            color: #e74c3c;
+        }
+
+        .donation-eligibility {
+            margin-top: 3rem;
+        }
+
+        .eligibility-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .eligibility-item {
+            background-color: var(--bg-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: transform var(--transition-medium);
+        }
+
+        .eligibility-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .eligibility-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .eligibility-content h4 {
+            color: var(--text-dark);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .eligibility-content p {
+            color: var(--text-light);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .faq-section {
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background-color: var(--bg-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.2rem;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color var(--transition-fast);
+        }
+
+        .faq-question:hover {
+            background-color: #f9f9f9;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .faq-question.active::after {
+            content: '-';
+        }
+
+        .faq-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-medium), padding var(--transition-medium);
+        }
+
+        .faq-answer.active {
+            padding: 1.2rem;
+            max-height: 500px;
+        }
+
+        .back-to-home {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-to-home:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #333, #222);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), transparent, var(--primary-color));
+            animation: slideIn 3s infinite alternate;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animation classes */
+        .fadeIn,
+        .fadeInUp,
+        .fadeInDown,
+        .fadeInLeft,
+        .fadeInRight,
+        .zoomIn,
+        .slideIn {
+            opacity: 0;
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .fadeIn.visible {
+            opacity: 1;
+        }
+
+        .fadeInUp.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fadeInDown.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fadeInLeft.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fadeInRight.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .zoomIn.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slideIn.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Initial transform states */
+        .fadeInUp:not(.visible) {
+            transform: translateY(30px);
+        }
+
+        .fadeInDown:not(.visible) {
+            transform: translateY(-30px);
+        }
+
+        .fadeInLeft:not(.visible) {
+            transform: translateX(-30px);
+        }
+
+        .fadeInRight:not(.visible) {
+            transform: translateX(30px);
+        }
+
+        .zoomIn:not(.visible) {
+            transform: scale(0.9);
+        }
+
+        .slideIn:not(.visible) {
+            transform: translateX(-100%);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .blood-type-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-logo {
+                height: 40px;
+            }
+
+            .eligibility-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .education-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .compatibility-table {
+                font-size: 0.8rem;
+            }
+
+            .compatibility-table th,
+            .compatibility-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-content">
+            <img src="../assets/logos/blood-bank-logo.svg" alt="Blood Bank Logo" class="header-logo">
+            <h1>Blood Education Center</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="./Home.html" class="back-to-home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+            </svg>
+            Back to Home
+        </a>
+
+        <div class="education-section fadeIn">
+            <h2>Understanding Blood Types</h2>
+            <p>Blood types are determined by the presence or absence of certain antigens – substances that can trigger
+                an immune response if they are foreign to the body. There are four main blood groups: A, B, AB, and O.
+                Additionally, blood is classified by the Rhesus (Rh) factor – another antigen on the surface of red
+                blood cells. If this antigen is present, the blood type is positive (+); if absent, it's negative (-).
+            </p>
+
+            <div class="blood-types-container">
+                <object data="../assets/animations/blood-education.svg" type="image/svg+xml"
+                    class="blood-education-svg"></object>
+            </div>
+
+            <div class="blood-type-grid">
+                <div class="blood-type-card fadeInUp" style="animation-delay: 0.2s;">
+                    <h3>
+                        <span class="blood-type-icon">A</span>
+                        Type A Blood
+                    </h3>
+                    <ul>
+                        <li>Has A antigens on red blood cells</li>
+                        <li>Has anti-B antibodies in plasma</li>
+                        <li>Can donate to: A and AB</li>
+                        <li>Can receive from: A and O</li>
+                        <li>About 30% of population</li>
+                    </ul>
+                </div>
+
+                <div class="blood-type-card fadeInUp" style="animation-delay: 0.4s;">
+                    <h3>
+                        <span class="blood-type-icon">B</span>
+                        Type B Blood
+                    </h3>
+                    <ul>
+                        <li>Has B antigens on red blood cells</li>
+                        <li>Has anti-A antibodies in plasma</li>
+                        <li>Can donate to: B and AB</li>
+                        <li>Can receive from: B and O</li>
+                        <li>About 9% of population</li>
+                    </ul>
+                </div>
+
+                <div class="blood-type-card fadeInUp" style="animation-delay: 0.6s;">
+                    <h3>
+                        <span class="blood-type-icon">AB</span>
+                        Type AB Blood
+                    </h3>
+                    <ul>
+                        <li>Has both A and B antigens on red blood cells</li>
+                        <li>Has no antibodies in plasma</li>
+                        <li>Can donate to: AB only</li>
+                        <li>Can receive from: A, B, AB, and O (Universal Receiver)</li>
+                        <li>About 4% of population</li>
+                    </ul>
+                </div>
+
+                <div class="blood-type-card fadeInUp" style="animation-delay: 0.8s;">
+                    <h3>
+                        <span class="blood-type-icon">O</span>
+                        Type O Blood
+                    </h3>
+                    <ul>
+                        <li>Has no antigens on red blood cells</li>
+                        <li>Has both anti-A and anti-B antibodies in plasma</li>
+                        <li>Can donate to: A, B, AB, and O (Universal Donor)</li>
+                        <li>Can receive from: O only</li>
+                        <li>About 57% of population</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="education-section compatibility-section fadeIn">
+            <h2>Blood Type Compatibility Chart</h2>
+            <p>Understanding blood type compatibility is crucial for safe transfusions. The chart below shows which
+                blood types can donate to and receive from other types:</p>
+
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Blood Type</th>
+                        <th>Can Donate To</th>
+                        <th>Can Receive From</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A+</td>
+                        <td>A+, AB+</td>
+                        <td>A+, A-, O+, O-</td>
+                    </tr>
+                    <tr>
+                        <td>A-</td>
+                        <td>A+, A-, AB+, AB-</td>
+                        <td>A-, O-</td>
+                    </tr>
+                    <tr>
+                        <td>B+</td>
+                        <td>B+, AB+</td>
+                        <td>B+, B-, O+, O-</td>
+                    </tr>
+                    <tr>
+                        <td>B-</td>
+                        <td>B+, B-, AB+, AB-</td>
+                        <td>B-, O-</td>
+                    </tr>
+                    <tr>
+                        <td>AB+</td>
+                        <td>AB+ only</td>
+                        <td>All blood types (Universal Receiver)</td>
+                    </tr>
+                    <tr>
+                        <td>AB-</td>
+                        <td>AB+, AB-</td>
+                        <td>A-, B-, AB-, O-</td>
+                    </tr>
+                    <tr>
+                        <td>O+</td>
+                        <td>A+, B+, AB+, O+</td>
+                        <td>O+, O-</td>
+                    </tr>
+                    <tr>
+                        <td>O-</td>
+                        <td>All blood types (Universal Donor)</td>
+                        <td>O- only</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="education-section donation-eligibility fadeIn">
+            <h2>Blood Donation Eligibility</h2>
+            <p>Before donating blood, donors must meet certain eligibility criteria to ensure the safety of both the
+                donor and the recipient. Here are some general requirements:</p>
+
+            <div class="eligibility-list">
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 0.2s;">
+                    <div class="eligibility-icon">1</div>
+                    <div class="eligibility-content">
+                        <h4>Age</h4>
+                        <p>Most donors must be at least 17 years old (16 with parental consent in some states) and there
+                            is no upper age limit for blood donation as long as you are well.</p>
+                    </div>
+                </div>
+
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 0.4s;">
+                    <div class="eligibility-icon">2</div>
+                    <div class="eligibility-content">
+                        <h4>Weight</h4>
+                        <p>Donors must weigh at least 110 pounds (50 kg). Additional weight requirements apply for
+                            donors under 18 years old.</p>
+                    </div>
+                </div>
+
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 0.6s;">
+                    <div class="eligibility-icon">3</div>
+                    <div class="eligibility-content">
+                        <h4>Health</h4>
+                        <p>You must be in good health and feeling well on the day of donation. You should not have a
+                            fever, sore throat, or other infections.</p>
+                    </div>
+                </div>
+
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 0.8s;">
+                    <div class="eligibility-icon">4</div>
+                    <div class="eligibility-content">
+                        <h4>Hemoglobin Levels</h4>
+                        <p>Your hemoglobin level must be at least 12.5 g/dL for women and 13.0 g/dL for men. This will
+                            be checked before donation.</p>
+                    </div>
+                </div>
+
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 1.0s;">
+                    <div class="eligibility-icon">5</div>
+                    <div class="eligibility-content">
+                        <h4>Time Between Donations</h4>
+                        <p>You must wait at least 8 weeks (56 days) between whole blood donations and 16 weeks (112
+                            days) between double red cell donations.</p>
+                    </div>
+                </div>
+
+                <div class="eligibility-item fadeInLeft" style="animation-delay: 1.2s;">
+                    <div class="eligibility-icon">6</div>
+                    <div class="eligibility-content">
+                        <h4>Travel</h4>
+                        <p>Travel to certain countries may temporarily disqualify you from donating blood due to
+                            potential exposure to malaria or other diseases.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="education-section faq-section fadeIn">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">How often can I donate blood?</div>
+                    <div class="faq-answer">
+                        <p>For whole blood donations, you can donate once every 8 weeks (56 days). For double red cell
+                            donations, you can donate once every 16 weeks (112 days). For platelet donations, you can
+                            donate once every 7 days, up to 24 times per year.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Does donating blood hurt?</div>
+                    <div class="faq-answer">
+                        <p>Most people report only a brief pinch when the needle is inserted. The actual donation
+                            process is usually painless. Our trained staff will make sure you're comfortable throughout
+                            the process.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How long does a blood donation take?</div>
+                    <div class="faq-answer">
+                        <p>The entire process takes about one hour, though the actual blood donation only takes about
+                            8-10 minutes. The rest of the time is spent on registration, a mini-physical, and
+                            refreshments after donation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it safe to donate blood?</div>
+                    <div class="faq-answer">
+                        <p>Yes, it is completely safe to donate blood. All equipment used for blood donation is sterile
+                            and used only once. There is no risk of contracting any disease by donating blood.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What should I eat before donating blood?</div>
+                    <div class="faq-answer">
+                        <p>It's recommended to have a healthy, iron-rich meal before donating blood. Foods high in iron
+                            include red meat, spinach, beans, and fortified cereals. Also, drink plenty of water before
+                            your donation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div
+            style="display: flex; justify-content: space-between; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Blood Bank</h4>
+                <p style="color: #aaa; font-size: 0.9rem;">Connecting donors with recipients to save lives every day.
+                </p>
+            </div>
+
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">About Us</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">Contact</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Contact Us</h4>
+                <p style="color: #aaa; font-size: 0.9rem;">Email: mvsstccscsavas@gmail.com</p>
+                <p style="color: #aaa; font-size: 0.9rem;">Phone: +91 94925 69789</p>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #444; padding-top: 1rem; margin-top: 1rem;">
+            <p>&copy; 2025 Blood Bank Management System. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize animations when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            // Apply animations to elements with animation classes
+            const animatedElements = document.querySelectorAll('.fadeIn, .fadeInUp, .fadeInDown, .fadeInLeft, .fadeInRight, .zoomIn, .slideIn');
+
+            // Create an Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // If element is in viewport
+                    if (entry.isIntersecting) {
+                        // Add visible class to trigger animation
+                        entry.target.classList.add('visible');
+                        // Unobserve after animation is triggered
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 }); // Trigger when at least 10% of the element is visible
+
+            // Observe all animated elements
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // FAQ accordion functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function () {
+                    // Toggle active class on question
+                    this.classList.toggle('active');
+
+                    // Toggle active class on answer
+                    const answer = this.nextElementSibling;
+                    answer.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

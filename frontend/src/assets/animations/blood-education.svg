@@ -1,0 +1,258 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <style>
+    /* Base styles */
+    text {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      fill: #333;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      fill: #e74c3c;
+      text-anchor: middle;
+    }
+    
+    .subtitle {
+      font-size: 12px;
+      fill: #666;
+      text-anchor: middle;
+    }
+    
+    /* Blood drop styles */
+    .blood-drop {
+      fill: #e74c3c;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+    }
+    
+    .blood-type {
+      font-size: 14px;
+      font-weight: bold;
+      fill: white;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+    
+    .blood-info {
+      font-size: 10px;
+      fill: #666;
+      text-anchor: middle;
+    }
+    
+    .highlight {
+      fill: #3498db;
+    }
+    
+    /* Animation keyframes */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(231,76,60,0.3)); }
+      50% { filter: drop-shadow(0 0 8px rgba(231,76,60,0.6)); }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Apply animations */
+    .pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    .float {
+      animation: float 3s infinite ease-in-out;
+    }
+    
+    .glow {
+      animation: glow 2s infinite ease-in-out;
+    }
+    
+    .rotate {
+      animation: rotate 10s infinite linear;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+    
+    /* Animation delays */
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+    
+    /* Interactive elements */
+    .blood-drop-group {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    
+    .blood-drop-group:hover {
+      transform: scale(1.1);
+    }
+    
+    .info-panel {
+      fill: white;
+      stroke: #ddd;
+      stroke-width: 1;
+      rx: 5;
+      ry: 5;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .info-panel.active {
+      opacity: 1;
+    }
+    
+    .info-title {
+      font-size: 12px;
+      font-weight: bold;
+      fill: #e74c3c;
+    }
+    
+    .info-text {
+      font-size: 9px;
+      fill: #666;
+    }
+    
+    .close-btn {
+      fill: #999;
+      cursor: pointer;
+    }
+    
+    .close-btn:hover {
+      fill: #e74c3c;
+    }
+    
+    /* Background elements */
+    .bg-circle {
+      fill: none;
+      stroke: #f8d7da;
+      stroke-width: 1;
+      opacity: 0.5;
+    }
+  </style>
+  
+  <!-- Background elements -->
+  <circle class="bg-circle rotate" cx="200" cy="150" r="140" />
+  <circle class="bg-circle rotate" style="animation-direction: reverse;" cx="200" cy="150" r="120" />
+  
+  <!-- Title -->
+  <text x="200" y="30" class="title fade-in">Blood Types Education</text>
+  <text x="200" y="50" class="subtitle fade-in delay-1">Click on any blood type to learn more</text>
+  
+  <!-- Blood Type A -->
+  <g class="blood-drop-group fade-in delay-1" id="type-a" transform="translate(100, 120)" onclick="showInfo('info-a')">
+    <path class="blood-drop pulse" d="M0,0 C0,-20 20,-40 20,-40 C20,-40 40,-20 40,0 C40,22 20,40 0,40 C-20,40 -40,22 -40,0 C-40,-20 -20,-40 -20,-40 C-20,-40 0,-20 0,0 Z" />
+    <text x="0" y="5" class="blood-type">A</text>
+    <text x="0" y="60" class="blood-info">Type A</text>
+  </g>
+  
+  <!-- Blood Type B -->
+  <g class="blood-drop-group fade-in delay-2" id="type-b" transform="translate(200, 120)" onclick="showInfo('info-b')">
+    <path class="blood-drop pulse" d="M0,0 C0,-20 20,-40 20,-40 C20,-40 40,-20 40,0 C40,22 20,40 0,40 C-20,40 -40,22 -40,0 C-40,-20 -20,-40 -20,-40 C-20,-40 0,-20 0,0 Z" />
+    <text x="0" y="5" class="blood-type">B</text>
+    <text x="0" y="60" class="blood-info">Type B</text>
+  </g>
+  
+  <!-- Blood Type AB -->
+  <g class="blood-drop-group fade-in delay-3" id="type-ab" transform="translate(300, 120)" onclick="showInfo('info-ab')">
+    <path class="blood-drop pulse" d="M0,0 C0,-20 20,-40 20,-40 C20,-40 40,-20 40,0 C40,22 20,40 0,40 C-20,40 -40,22 -40,0 C-40,-20 -20,-40 -20,-40 C-20,-40 0,-20 0,0 Z" />
+    <text x="0" y="5" class="blood-type">AB</text>
+    <text x="0" y="60" class="blood-info">Type AB</text>
+  </g>
+  
+  <!-- Blood Type O -->
+  <g class="blood-drop-group fade-in delay-4" id="type-o" transform="translate(200, 220)" onclick="showInfo('info-o')">
+    <path class="blood-drop glow" d="M0,0 C0,-20 20,-40 20,-40 C20,-40 40,-20 40,0 C40,22 20,40 0,40 C-20,40 -40,22 -40,0 C-40,-20 -20,-40 -20,-40 C-20,-40 0,-20 0,0 Z" />
+    <text x="0" y="5" class="blood-type">O</text>
+    <text x="0" y="60" class="blood-info">Type O</text>
+  </g>
+  
+  <!-- Info Panels (initially hidden) -->
+  <g id="info-a" class="info-panel">
+    <rect x="50" y="50" width="300" height="200" />
+    <text x="70" y="80" class="info-title">Type A Blood</text>
+    <text x="70" y="100" class="info-text">• Has A antigens on red blood cells</text>
+    <text x="70" y="120" class="info-text">• Has anti-B antibodies in plasma</text>
+    <text x="70" y="140" class="info-text">• Can donate to: A and AB</text>
+    <text x="70" y="160" class="info-text">• Can receive from: A and O</text>
+    <text x="70" y="180" class="info-text">• Approximately 30% of the population has type A blood</text>
+    <circle class="close-btn" cx="330" cy="70" r="10" onclick="hideInfo('info-a')" />
+    <text x="330" y="74" text-anchor="middle" font-size="14" fill="white" pointer-events="none">×</text>
+  </g>
+  
+  <g id="info-b" class="info-panel">
+    <rect x="50" y="50" width="300" height="200" />
+    <text x="70" y="80" class="info-title">Type B Blood</text>
+    <text x="70" y="100" class="info-text">• Has B antigens on red blood cells</text>
+    <text x="70" y="120" class="info-text">• Has anti-A antibodies in plasma</text>
+    <text x="70" y="140" class="info-text">• Can donate to: B and AB</text>
+    <text x="70" y="160" class="info-text">• Can receive from: B and O</text>
+    <text x="70" y="180" class="info-text">• Approximately 9% of the population has type B blood</text>
+    <circle class="close-btn" cx="330" cy="70" r="10" onclick="hideInfo('info-b')" />
+    <text x="330" y="74" text-anchor="middle" font-size="14" fill="white" pointer-events="none">×</text>
+  </g>
+  
+  <g id="info-ab" class="info-panel">
+    <rect x="50" y="50" width="300" height="200" />
+    <text x="70" y="80" class="info-title">Type AB Blood</text>
+    <text x="70" y="100" class="info-text">• Has both A and B antigens on red blood cells</text>
+    <text x="70" y="120" class="info-text">• Has no antibodies in plasma</text>
+    <text x="70" y="140" class="info-text">• Can donate to: AB only (Universal Receiver)</text>
+    <text x="70" y="160" class="info-text">• Can receive from: A, B, AB, and O</text>
+    <text x="70" y="180" class="info-text">• Approximately 4% of the population has type AB blood</text>
+    <circle class="close-btn" cx="330" cy="70" r="10" onclick="hideInfo('info-ab')" />
+    <text x="330" y="74" text-anchor="middle" font-size="14" fill="white" pointer-events="none">×</text>
+  </g>
+  
+  <g id="info-o" class="info-panel">
+    <rect x="50" y="50" width="300" height="200" />
+    <text x="70" y="80" class="info-title">Type O Blood</text>
+    <text x="70" y="100" class="info-text">• Has no antigens on red blood cells</text>
+    <text x="70" y="120" class="info-text">• Has both anti-A and anti-B antibodies in plasma</text>
+    <text x="70" y="140" class="info-text">• Can donate to: A, B, AB, and O (Universal Donor)</text>
+    <text x="70" y="160" class="info-text">• Can receive from: O only</text>
+    <text x="70" y="180" class="info-text">• Approximately 57% of the population has type O blood</text>
+    <circle class="close-btn" cx="330" cy="70" r="10" onclick="hideInfo('info-o')" />
+    <text x="330" y="74" text-anchor="middle" font-size="14" fill="white" pointer-events="none">×</text>
+  </g>
+  
+  <!-- JavaScript for interactivity -->
+  <script type="text/javascript">
+    // Function to show info panel
+    function showInfo(id) {
+      // Hide all panels first
+      const panels = document.querySelectorAll('.info-panel');
+      panels.forEach(panel => {
+        panel.classList.remove('active');
+      });
+      
+      // Show the selected panel
+      document.getElementById(id).classList.add('active');
+    }
+    
+    // Function to hide info panel
+    function hideInfo(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+  </script>
+</svg>

@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <style>
+    @keyframes pulse {
+      0% { stroke-width: 2; filter: drop-shadow(0 0 1px rgba(231, 76, 60, 0.3)); }
+      50% { stroke-width: 4; filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.7)); }
+      100% { stroke-width: 2; filter: drop-shadow(0 0 1px rgba(231, 76, 60, 0.3)); }
+    }
+    
+    @keyframes draw {
+      0% { stroke-dashoffset: 1000; }
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      70% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.2); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.15); }
+      60% { transform: scale(1); }
+    }
+    
+    @keyframes glowPulse {
+      0% { filter: drop-shadow(0 0 2px rgba(231, 76, 60, 0.3)); }
+      50% { filter: drop-shadow(0 0 8px rgba(231, 76, 60, 0.7)); }
+      100% { filter: drop-shadow(0 0 2px rgba(231, 76, 60, 0.3)); }
+    }
+    
+    @keyframes gridFade {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+      100% { opacity: 0.3; }
+    }
+    
+    .heartbeat-line {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+      animation: draw 3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite, pulse 3s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+    }
+    
+    .heart {
+      animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, heartbeat 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite 0.8s;
+      opacity: 0;
+      animation-delay: 2s;
+      transform-origin: center;
+      filter: drop-shadow(0 0 5px rgba(231, 76, 60, 0.5));
+    }
+    
+    .grid-line {
+      animation: gridFade 5s ease-in-out infinite;
+    }
+    
+    .glow-effect {
+      animation: glowPulse 3s infinite;
+    }
+    
+    .marker {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .marker:nth-child(1) { animation-delay: 0.5s; }
+    .marker:nth-child(2) { animation-delay: 1.0s; }
+    .marker:nth-child(3) { animation-delay: 1.5s; }
+    .marker:nth-child(4) { animation-delay: 2.0s; }
+  </style>
+  
+  <!-- Background with Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa" />
+      <stop offset="100%" stop-color="#f0f0f0" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <rect width="400" height="200" fill="url(#bgGradient)"/>
+  
+  <!-- Enhanced Background Grid -->
+  <path class="grid-line" d="M0 100 H400" stroke="#ddd" stroke-width="1"/>
+  <path class="grid-line" d="M0 50 H400" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+  <path class="grid-line" d="M0 150 H400" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5"/>
+  <path class="grid-line" d="M50 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M100 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M150 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M200 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M250 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M300 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <path class="grid-line" d="M350 0 V200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,6"/>
+  
+  <!-- Heartbeat Line with Enhanced Animation -->
+  <path class="heartbeat-line" d="M0 100 L50 100 L70 100 L80 70 L100 130 L120 70 L140 130 L160 100 L180 100 L200 40 L220 160 L240 100 L260 100 L280 100 L300 100 L320 100 L340 100 L360 100 L400 100" 
+        fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Markers for Key Points -->
+  <circle class="marker" cx="80" cy="70" r="3" fill="#e74c3c" />
+  <circle class="marker" cx="120" cy="70" r="3" fill="#e74c3c" />
+  <circle class="marker" cx="200" cy="40" r="3" fill="#e74c3c" />
+  <circle class="marker" cx="220" cy="160" r="3" fill="#e74c3c" />
+  
+  <!-- Enhanced Heart Icon with Gradient -->
+  <defs>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e74c3c" />
+      <stop offset="100%" stop-color="#c0392b" />
+    </linearGradient>
+  </defs>
+  
+  <g class="glow-effect">
+    <path class="heart" d="M350 80 Q360 65 370 80 T390 80 Q390 95 370 110 Q350 125 330 110 Q310 95 310 80 Q310 65 320 80 T330 80 Z" 
+          fill="url(#heartGradient)" opacity="0"/>
+  </g>
+  
+  <!-- Subtle Pulse Rings Around Heart -->
+  <circle cx="350" cy="95" r="30" fill="none" stroke="#e74c3c" stroke-width="0.5" opacity="0.2" class="pulse" />
+  
+  <!-- Labels -->
+  <text x="10" y="20" font-family="'Segoe UI', sans-serif" font-size="12" fill="#666" class="marker">Heartbeat Monitor</text>
+  <text x="10" y="180" font-family="'Segoe UI', sans-serif" font-size="10" fill="#999" class="marker">BPM: 75</text>
+</svg>

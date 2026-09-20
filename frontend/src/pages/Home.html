@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="../config.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Blood Bank</title>
+    <link rel="icon" href="../assets/logos/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../styles/animations.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #f8d7da;
+            --secondary-color: #3498db;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
+            --transition-fast: 0.3s;
+            --transition-medium: 0.5s;
+            --transition-slow: 0.8s;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 800px;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .blood-types-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .blood-type-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            width: calc(50% - 20px);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-fast);
+            border-left: 5px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .blood-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .blood-type-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .blood-type-info {
+            flex-grow: 1;
+        }
+
+        .blood-type-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--text-dark);
+        }
+
+        .blood-type-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .compatibility-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .compatibility-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: var(--shadow-sm);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .compatibility-table th,
+        .compatibility-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .compatibility-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .compatibility-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .compatibility-table .compatible {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .compatibility-table .incompatible {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .blood-type-card {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 15% auto;
+                padding: 15px;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles with Animation */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: pulse 8s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-logo {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            transition: transform var(--transition-medium);
+        }
+
+        .header-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInRight 1s ease-out;
+        }
+
+        /* Container and Section Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .welcome-section {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .welcome-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .welcome-text {
+            flex: 1;
+            animation-delay: 0.2s;
+        }
+
+        .welcome-image {
+            flex: 1;
+            text-align: center;
+            animation-delay: 0.4s;
+            position: relative;
+        }
+
+        .welcome-image::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0) 70%);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: pulse 4s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .welcome-section h2 {
+            color: var(--text-dark);
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .welcome-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        .welcome-section p {
+            color: var(--text-light);
+            font-size: 1.15rem;
+            margin-bottom: 1.8rem;
+            line-height: 1.8;
+        }
+
+        .donation-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+        }
+
+        .donation-image:hover {
+            transform: scale(1.03);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .process-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            animation-delay: 0.6s;
+        }
+
+        .process-section h3 {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .process-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            animation: pulse 2s infinite;
+        }
+
+        .process-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-medium);
+        }
+
+        .process-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            padding: 2.5rem;
+            width: 320px;
+            text-align: center;
+            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            z-index: 2;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+            z-index: -1;
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 1.8rem;
+            line-height: 1.7;
+        }
+
+        .card-icon {
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: pulse 3s infinite;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+            transition: transform 0.6s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn:hover::before {
+            transform: translateX(200%);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #333, #222);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), transparent, var(--primary-color));
+            animation: slideIn 3s infinite alternate;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* User Info and Loading Styles */
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2.5rem;
+            background-color: var(--bg-white);
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .user-name::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .logout-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1.5px solid var(--primary-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            z-index: -1;
+        }
+
+        .logout-btn:hover {
+            color: white;
+        }
+
+        .logout-btn:hover::after {
+            width: 200%;
+            height: 200%;
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--bg-white);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .loading-animation {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-container p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .card {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-content {
+                flex-direction: column;
+            }
+
+            .welcome-text,
+            .welcome-image {
+                flex: none;
+                width: 100%;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-logo {
+                height: 40px;
+            }
+
+            .user-info {
+                padding: 0.8rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .welcome-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                width: 100%;
+                padding: 2rem 1.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-container" id="loadingContainer">
+        <img src="../assets/animations/blood-drop-loading.svg" alt="Loading..." class="loading-animation">
+        <p>Loading your profile...</p>
+        <div class="loading-text" style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">Please wait while we
+            prepare your dashboard</div>
+    </div>
+
+    <div class="user-info" id="userInfoContainer" style="display: none;">
+        <div class="user-name" id="userName">Welcome, Guest</div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <img src="../assets/logos/blood-bank-logo.svg" alt="Blood Bank Logo" class="header-logo">
+            <h1>Blood Bank Management System</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-text fadeInLeft">
+                    <h2>Welcome to the Blood Bank</h2>
+                    <p>Our mission is to connect blood donors with those in need. Whether you're looking to donate blood
+                        or searching for donors, we're here to help facilitate this life-saving process.</p>
+                    <div class="stats-container" style="display: flex; gap: 20px; margin-top: 20px;">
+                        <div class="stat-item fadeIn" style="animation-delay: 0.3s;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"
+                                class="counter">120+</div>
+                            <div style="font-size: 0.9rem; color: var(--text-light);">Donors</div>
+                        </div>
+                        <div class="stat-item fadeIn" style="animation-delay: 0.6s;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"
+                                class="counter">70+</div>
+                            <div style="font-size: 0.9rem; color: var(--text-light);">Lives Saved</div>
+                        </div>
+                        <div class="stat-item fadeIn" style="animation-delay: 0.9s;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);"
+                                class="counter">24/7</div>
+                            <div style="font-size: 0.9rem; color: var(--text-light);">Support</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="welcome-image fadeInRight">
+                    <img src="../assets/images/blood-donation.svg" alt="Blood Donation Illustration"
+                        class="donation-image">
+                </div>
+            </div>
+            <div class="process-section fadeInUp" style="animation-delay: 0.5s;">
+                <h3>Donation Process</h3>
+                <div class="process-steps"
+                    style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 30px; gap: 20px;">
+                    <div class="process-step fadeIn"
+                        style="animation-delay: 0.7s; flex: 1; min-width: 200px; max-width: 250px;">
+                        <div class="step-number"
+                            style="background: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-weight: bold; box-shadow: var(--shadow-sm);">
+                            1</div>
+                        <h4>Register</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Create your account and complete your
+                            profile with your blood type and location.</p>
+                    </div>
+                    <div class="process-step fadeIn"
+                        style="animation-delay: 0.9s; flex: 1; min-width: 200px; max-width: 250px;">
+                        <div class="step-number"
+                            style="background: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-weight: bold; box-shadow: var(--shadow-sm);">
+                            2</div>
+                        <h4>Schedule</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Choose a convenient time and location
+                            for your blood donation.</p>
+                    </div>
+                    <div class="process-step fadeIn"
+                        style="animation-delay: 1.1s; flex: 1; min-width: 200px; max-width: 250px;">
+                        <div class="step-number"
+                            style="background: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-weight: bold; box-shadow: var(--shadow-sm);">
+                            3</div>
+                        <h4>Donate</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Complete your donation and help save
+                            lives in your community.</p>
+                    </div>
+                </div>
+                <img src="../assets/images/donation-process.svg" alt="Donation Process" class="process-image"
+                    style="margin-top: 30px;">
+            </div>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card card-hover-effect zoomIn" style="animation-delay: 0.3s;">
+                <div class="card-icon">
+                    <img src="../assets/logos/blood-drop-logo.svg" alt="Blood Drop" width="70" height="70"
+                        class="bloodPulse">
+                </div>
+                <h3>Donor Dashboard</h3>
+                <p>Register as a donor, update your information, and help save lives by donating blood.</p>
+                <a href="./Donor.html" class="btn btn-hover-effect">Go to Donor Dashboard</a>
+            </div>
+
+            <div class="card card-hover-effect zoomIn" style="animation-delay: 0.6s;">
+                <div class="card-icon">
+                    <img src="../assets/images/blood-types.svg" alt="Blood Types" width="150" height="70">
+                </div>
+                <h3>Receiver Dashboard</h3>
+                <p>Search for blood donors based on location and blood group, and connect with them.</p>
+                <a href="./Receiver.html" class="btn btn-hover-effect">Go to Receiver Dashboard</a>
+            </div>
+
+            <div class="card card-hover-effect zoomIn" style="animation-delay: 0.9s;">
+                <div class="card-icon">
+                    <img src="../assets/animations/blood-education.svg" alt="Blood Education" width="70" height="70">
+                </div>
+                <h3>Blood Education</h3>
+                <p>Learn about blood types, donation eligibility, and the importance of regular blood donation.</p>
+                <div style="display: flex; justify-content: center;">
+                    <button onclick="openBloodTypeModal()" class="btn btn-hover-effect"
+                        style="background: linear-gradient(135deg, #3498db, #2980b9); width: 100%;">Quick View</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonials-section" style="margin-top: 4rem; text-align: center;">
+            <h3 style="color: var(--text-dark); font-size: 1.8rem; margin-bottom: 2rem; position: relative; display: inline-block;"
+                class="fadeIn">
+                What Our Donors Say
+                <span
+                    style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background-color: var(--primary-color); display: block;"></span>
+            </h3>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                <div class="testimonial-card fadeIn"
+                    style="animation-delay: 0.3s; background: var(--bg-white); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); max-width: 300px; text-align: left;">
+                    <div style="font-size: 1.5rem; color: var(--primary-color); margin-bottom: 10px;">❝</div>
+                    <p style="font-style: italic; color: var(--text-light); margin-bottom: 15px;">If you want to find
+                        God, serve man.</p>
+                    <div style="font-weight: 600; color: var(--text-dark);">- Swami Vivekananda</div>
+                </div>
+
+                <div class="testimonial-card fadeIn"
+                    style="animation-delay: 0.6s; background: var(--bg-white); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm); max-width: 300px; text-align: left;">
+                    <div style="font-size: 1.5rem; color: var(--primary-color); margin-bottom: 10px;">❝</div>
+                    <p style="font-style: italic; color: var(--text-light); margin-bottom: 15px;">It is only by doing
+                        good to others that one does good to oneself.</p>
+                    <div style="font-weight: 600; color: var(--text-dark);">- Swami Vivekananda</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Type Education Modal -->
+    <div id="bloodTypeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBloodTypeModal()">&times;</span>
+            <h2 style="text-align: center; color: var(--primary-color);">Understanding Blood Types</h2>
+            <p style="text-align: center;">Learn about different blood types, their characteristics, and compatibility
+                for donation and transfusion.</p>
+
+            <div class="blood-types-container">
+                <div class="blood-type-card">
+                    <div class="blood-type-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">A</div>
+                    <div class="blood-type-info">
+                        <h4>Type A</h4>
+                        <p>Has A antigens on red blood cells and B antibodies in plasma</p>
+                        <p><strong>Can donate to:</strong> A, AB</p>
+                        <p><strong>Can receive from:</strong> A, O</p>
+                    </div>
+                </div>
+
+                <div class="blood-type-card">
+                    <div class="blood-type-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">B</div>
+                    <div class="blood-type-info">
+                        <h4>Type B</h4>
+                        <p>Has B antigens on red blood cells and A antibodies in plasma</p>
+                        <p><strong>Can donate to:</strong> B, AB</p>
+                        <p><strong>Can receive from:</strong> B, O</p>
+                    </div>
+                </div>
+
+                <div class="blood-type-card">
+                    <div class="blood-type-icon" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">AB</div>
+                    <div class="blood-type-info">
+                        <h4>Type AB</h4>
+                        <p>Has both A and B antigens on red blood cells and no antibodies in plasma</p>
+                        <p><strong>Can donate to:</strong> AB only</p>
+                        <p><strong>Can receive from:</strong> All types (Universal recipient)</p>
+                    </div>
+                </div>
+
+                <div class="blood-type-card">
+                    <div class="blood-type-icon" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">O</div>
+                    <div class="blood-type-info">
+                        <h4>Type O</h4>
+                        <p>Has no antigens on red blood cells and both A and B antibodies in plasma</p>
+                        <p><strong>Can donate to:</strong> All types (Universal donor)</p>
+                        <p><strong>Can receive from:</strong> O only</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compatibility-section">
+                <h3>Blood Type Compatibility Chart</h3>
+                <table class="compatibility-table">
+                    <tr>
+                        <th>Blood Type</th>
+                        <th>Can Donate To</th>
+                        <th>Can Receive From</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>A, AB</td>
+                        <td>A, O</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>B, AB</td>
+                        <td>B, O</td>
+                    </tr>
+                    <tr>
+                        <td>AB</td>
+                        <td>AB only</td>
+                        <td class="compatible">All Types</td>
+                    </tr>
+                    <tr>
+                        <td>O</td>
+                        <td class="compatible">All Types</td>
+                        <td>O only</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="./BloodEducation.html" class="btn btn-hover-effect">Learn More About Blood Types</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Modal -->
+    <div id="aboutUsModal" class="modal bloodTypeModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('aboutUsModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--primary-color);">About Us</h2>
+
+            <div style="margin-top: 20px;">
+                <h3 style="color: var(--text-dark);">Our Mission</h3>
+                <p>The Blood Bank Management System is dedicated to connecting blood donors with recipients in need,
+                    ensuring a reliable and efficient blood supply chain that saves lives every day.</p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">Our Story</h3>
+                <p>Founded in 2020, our platform was created by a team of healthcare professionals and technology
+                    experts who recognized the need for a more streamlined approach to blood donation and distribution.
+                </p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">Our Impact</h3>
+                <p>Since our inception, we have:</p>
+                <ul>
+                    <li>Connected over 1,000 donors with recipients in need</li>
+                    <li>Facilitated more than 500 successful blood transfusions</li>
+                    <li>Partnered with 25 hospitals and healthcare facilities</li>
+                    <li>Expanded our services to 10 cities nationwide</li>
+                </ul>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">Our Team</h3>
+                <p>Our dedicated team consists of medical professionals, software developers, and customer support
+                    specialists who work tirelessly to ensure the platform operates smoothly and efficiently.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal bloodTypeModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('contactModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--primary-color);">Contact Us</h2>
+
+            <div style="margin-top: 20px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="color: var(--text-dark);">Get in Touch</h3>
+                        <p>We're here to answer any questions you may have about our services, donor eligibility, or how
+                            to get involved.</p>
+
+                        <div style="margin-top: 20px;">
+                            <p><strong>Email:</strong> mvsstccscsavas@gmail.com</p>
+                            <p><strong>Phone:</strong> +91 94925 69789</p>
+                            <p><strong>Address:</strong> 123 Blood Bank Street, Kurnool District, Kurnool City, Andhra
+                                Pradesh 518002</p>
+                            <p><strong>Hours:</strong> Monday-Friday: 8am-6pm, Saturday: 9am-2pm, Sunday: Closed</p>
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="color: var(--text-dark);">Send Us a Message</h3>
+                        <form id="contactForm" style="margin-top: 15px;">
+                            <div style="margin-bottom: 15px;">
+                                <label for="name" style="display: block; margin-bottom: 5px;">Name</label>
+                                <input type="text" id="name" name="name"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
+                                <input type="email" id="email" name="email"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <label for="message" style="display: block; margin-bottom: 5px;">Message</label>
+                                <textarea id="message" name="message" rows="4"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-hover-effect" style="width: 100%;">Send
+                                Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyPolicyModal" class="modal bloodTypeModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('privacyPolicyModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--primary-color);">Privacy Policy</h2>
+
+            <div style="margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <p><strong>Last Updated:</strong> January 1, 2025</p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">1. Introduction</h3>
+                <p>The Blood Bank Management System ("we," "our," or "us") is committed to protecting your privacy. This
+                    Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use
+                    our platform.</p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">2. Information We Collect</h3>
+                <p>We collect the following types of information:</p>
+                <ul>
+                    <li><strong>Personal Information:</strong> Name, contact details, date of birth, and
+                        government-issued ID numbers.</li>
+                    <li><strong>Health Information:</strong> Blood type, medical history, and donation history.</li>
+                    <li><strong>Location Information:</strong> Your physical address and geolocation data.</li>
+                    <li><strong>Usage Data:</strong> Information about how you interact with our platform.</li>
+                </ul>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">3. How We Use Your Information</h3>
+                <p>We use your information for the following purposes:</p>
+                <ul>
+                    <li>To facilitate blood donation and distribution</li>
+                    <li>To verify your identity and eligibility</li>
+                    <li>To communicate with you about appointments and updates</li>
+                    <li>To improve our services and user experience</li>
+                    <li>To comply with legal and regulatory requirements</li>
+                </ul>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">4. Data Security</h3>
+                <p>We implement appropriate technical and organizational measures to protect your personal information
+                    against unauthorized access, alteration, disclosure, or destruction.</p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">5. Data Sharing and Disclosure</h3>
+                <p>We may share your information with:</p>
+                <ul>
+                    <li>Healthcare providers and hospitals</li>
+                    <li>Service providers who assist in our operations</li>
+                    <li>Government authorities when required by law</li>
+                </ul>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">6. Your Rights</h3>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Access and receive a copy of your personal data</li>
+                    <li>Rectify inaccurate or incomplete information</li>
+                    <li>Request deletion of your personal data</li>
+                    <li>Restrict or object to certain processing activities</li>
+                    <li>Data portability</li>
+                </ul>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">7. Changes to This Privacy Policy</h3>
+                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the
+                    new Privacy Policy on this page and updating the "Last Updated" date.</p>
+
+                <h3 style="color: var(--text-dark); margin-top: 20px;">8. Contact Us</h3>
+                <p>If you have any questions about this Privacy Policy, please contact us at
+                    <b>mvsstccscsavas@gmail.com</b>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div
+            style="display: flex; justify-content: space-between; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Blood Bank</h4>
+                <p style="color: #aaa; font-size: 0.9rem;">Connecting donors with recipients to save lives every day.
+                </p>
+            </div>
+
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="#" onclick="openModal('aboutUsModal'); return false;"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">About Us</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" onclick="openModal('contactModal'); return false;"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">Contact</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#"
+                            onclick="openModal('privacyPolicyModal'); return false;"
+                            style="color: #aaa; text-decoration: none; transition: color 0.3s;">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div style="flex: 1; min-width: 200px; margin-bottom: 1rem;">
+                <h4 style="color: white; margin-bottom: 1rem;">Contact Us</h4>
+                <p style="color: #aaa; font-size: 0.9rem;">Email: mvsstccscsavas@gmail.com</p>
+                <p style="color: #aaa; font-size: 0.9rem;">Phone: +91 94925 69789</p>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #444; padding-top: 1rem; margin-top: 1rem;">
+            <p>&copy; 2025 Blood Bank Management System. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        const userName = document.getElementById('userName');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Blood Type Modal Functions
+        function openBloodTypeModal() {
+            const modal = document.getElementById('bloodTypeModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+
+        function closeBloodTypeModal() {
+            const modal = document.getElementById('bloodTypeModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Generic Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            // For blood type modal
+            const bloodTypeModal = document.getElementById('bloodTypeModal');
+            if (event.target === bloodTypeModal) {
+                closeBloodTypeModal();
+            }
+
+            // For other modals
+            if (event.target.id === 'aboutUsModal') {
+                closeModal('aboutUsModal');
+            }
+            if (event.target.id === 'contactModal') {
+                closeModal('contactModal');
+            }
+            if (event.target.id === 'privacyPolicyModal') {
+                closeModal('privacyPolicyModal');
+            }
+        };
+
+        // Animation functions for elements with specific classes
+        function initAnimations() {
+            // Apply animations to elements with animation classes
+            const animatedElements = document.querySelectorAll('.fadeIn, .fadeInUp, .fadeInDown, .fadeInLeft, .fadeInRight, .zoomIn, .slideIn');
+
+            // Create an Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // If element is in viewport
+                    if (entry.isIntersecting) {
+                        // Add visible class to trigger animation
+                        entry.target.classList.add('visible');
+                        // Unobserve after animation is triggered
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 }); // Trigger when at least 10% of the element is visible
+
+            // Observe all animated elements
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Counter animation for statistics
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+
+            counters.forEach(counter => {
+                const target = counter.innerText;
+                const isPlus = target.includes('+');
+                const numTarget = parseInt(target.replace(/\D/g, ''));
+
+                // Skip non-numeric counters like "24/7"
+                if (isNaN(numTarget) || target.includes('/')) return;
+
+                let count = 0;
+                const duration = 2000; // 2 seconds
+                const interval = duration / numTarget;
+                const minInterval = 30; // Minimum interval to prevent too fast counting
+
+                counter.innerText = '0' + (isPlus ? '+' : '');
+
+                const timer = setInterval(() => {
+                    count++;
+                    counter.innerText = count + (isPlus ? '+' : '');
+
+                    if (count >= numTarget) {
+                        clearInterval(timer);
+                    }
+                }, Math.max(interval, minInterval));
+            });
+        }
+
+        // Add hover effects to cards
+        function enhanceCardInteractions() {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                    this.style.boxShadow = 'var(--shadow-lg)';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+        }
+
+        // Redirect to login if not authenticated
+        if (!token) {
+            window.location.href = './Login.html';
+        } else {
+            // Fetch user information
+            fetchUserInfo();
+        }
+
+        // Handle contact form submission
+        document.addEventListener('DOMContentLoaded', function () {
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                    closeModal('contactModal');
+                });
+            }
+        });
+
+        // Function to fetch user information
+        async function fetchUserInfo() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            const userInfoContainer = document.getElementById('userInfoContainer');
+
+            try {
+                // Simulate loading delay for better user experience with animations
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch(`${window.API_BASE_URL}/users/me/`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch user information');
+                        }
+
+                        const user = await response.json();
+                        userName.textContent = `Welcome, ${user.full_name || user.username}`;
+
+                        // Hide loading animation with fade out effect
+                        loadingContainer.style.opacity = '0';
+                        loadingContainer.style.transition = 'opacity 0.5s ease-out';
+
+                        setTimeout(() => {
+                            loadingContainer.style.display = 'none';
+                            userInfoContainer.style.display = 'flex';
+
+                            // Initialize animations after content is loaded
+                            initAnimations();
+                            setTimeout(animateCounters, 1000); // Start counter animations after a delay
+                            enhanceCardInteractions();
+                        }, 500); // Wait for fade out to complete
+
+                    } catch (error) {
+                        console.error('Error fetching user info:', error);
+                        // If token is invalid, redirect to login
+                        localStorage.removeItem('token');
+                        window.location.href = './Login.html';
+                    }
+                }, 1500); // Simulate loading for 1.5 seconds to show the animation
+
+            } catch (error) {
+                console.error('Error in fetch process:', error);
+                localStorage.removeItem('token');
+                window.location.href = './Login.html';
+            }
+        }
+
+        // Handle logout with animation
+        logoutBtn.addEventListener('click', () => {
+            // Add fade out animation to body
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-out';
+
+            // Wait for animation to complete before redirecting
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                window.location.href = './Login.html';
+            }, 500);
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return; // Skip if href is just #
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Add custom CSS for animation visibility control -->
+    <style>
+        /* Additional styles for specific modals */
+        #aboutUsModal .modal-content,
+        #contactModal .modal-content,
+        #privacyPolicyModal .modal-content {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        #contactForm input,
+        #contactForm textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        #contactForm input:focus,
+        #contactForm textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        #contactForm button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #contactForm button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Initial state for animations */
+        .fadeIn,
+        .fadeInUp,
+        .fadeInDown,
+        .fadeInLeft,
+        .fadeInRight,
+        .zoomIn,
+        .slideIn {
+            opacity: 0;
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        /* Visible state triggered by JavaScript */
+        .fadeIn.visible {
+            opacity: 1;
+        }
+
+        .fadeInUp.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fadeInDown.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fadeInLeft.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fadeInRight.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .zoomIn.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slideIn.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Initial transform states */
+        .fadeInUp:not(.visible) {
+            transform: translateY(30px);
+        }
+
+        .fadeInDown:not(.visible) {
+            transform: translateY(-30px);
+        }
+
+        .fadeInLeft:not(.visible) {
+            transform: translateX(-30px);
+        }
+
+        .fadeInRight:not(.visible) {
+            transform: translateX(30px);
+        }
+
+        .zoomIn:not(.visible) {
+            transform: scale(0.9);
+        }
+
+        .slideIn:not(.visible) {
+            transform: translateX(-100%);
+        }
+    </style>
+</body>
+
+</html>

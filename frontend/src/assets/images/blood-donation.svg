@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Hospital Building -->
+  <rect x="50" y="150" width="300" height="250" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  <rect x="170" y="300" width="60" height="100" fill="#e74c3c"/>
+  <rect x="180" y="350" width="40" height="50" fill="#fff"/>
+  <rect x="80" y="200" width="50" height="50" fill="#3498db" opacity="0.8"/>
+  <rect x="150" y="200" width="50" height="50" fill="#3498db" opacity="0.8"/>
+  <rect x="220" y="200" width="50" height="50" fill="#3498db" opacity="0.8"/>
+  <rect x="290" y="200" width="50" height="50" fill="#3498db" opacity="0.8"/>
+  <path d="M50 150 L200 80 L350 150" fill="#c0392b" stroke="#c0392b" stroke-width="2"/>
+  <rect x="175" y="100" width="50" height="50" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  <path d="M175 125 L225 125 M200 100 L200 150" stroke="#e74c3c" stroke-width="4"/>
+  
+  <!-- Blood Bag -->
+  <path d="M500 150 L550 150 L550 300 Q525 320 500 300 Z" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <rect x="510" y="130" width="30" height="20" fill="#ddd" stroke="#bbb" stroke-width="1"/>
+  <path d="M525 150 L525 220" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="510" y="280" font-family="Arial" font-size="16" fill="#fff">A+</text>
+  
+  <!-- Donor -->
+  <circle cx="650" cy="200" r="40" fill="#f5f5f5" stroke="#ddd" stroke-width="2"/>
+  <path d="M650 240 L650 320 M620 260 L680 260 M650 320 L620 380 M650 320 L680 380" stroke="#333" stroke-width="3"/>
+  <path d="M630 190 L640 200 L650 180" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M650 180 L660 200 L670 190" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Tube connecting donor to blood bag -->
+  <path d="M610 220 Q580 230 560 250 L550 250" stroke="#e74c3c" stroke-width="3" fill="none"/>
+  
+  <!-- Hearts floating -->
+  <path d="M450 100 Q470 80 490 100 T530 100 Q530 120 510 140 Q490 160 470 140 Q450 160 430 140 Q410 120 410 100 Q410 80 430 100 T450 100Z" fill="#e74c3c" opacity="0.8"/>
+  <path d="M700 120 Q715 105 730 120 T760 120 Q760 135 745 150 Q730 165 715 150 Q700 165 685 150 Q670 135 670 120 Q670 105 685 120 T700 120Z" fill="#e74c3c" opacity="0.6" transform="scale(0.7)"/>
+  <path d="M580 80 Q590 70 600 80 T620 80 Q620 90 610 100 Q600 110 590 100 Q580 110 570 100 Q560 90 560 80 Q560 70 570 80 T580 80Z" fill="#e74c3c" opacity="0.4" transform="scale(0.5)"/>
+  
+  <!-- Blood Drops -->
+  <path d="M480 350 Q480 380 460 380 Q440 380 440 350 Q440 320 460 300 Q480 320 480 350 Z" fill="#e74c3c"/>
+  <path d="M540 380 Q540 400 525 400 Q510 400 510 380 Q510 360 525 345 Q540 360 540 380 Z" fill="#e74c3c" transform="scale(0.8)"/>
+  
+  <!-- Text -->
+  <text x="400" y="450" font-family="Arial" font-size="24" font-weight="bold" fill="#333" text-anchor="middle">Donate Blood, Save Lives</text>
+</svg>
