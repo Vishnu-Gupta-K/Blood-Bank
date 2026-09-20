@@ -42,6 +42,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import traceback
+from fastapi.responses import JSONResponse
+from fastapi import Request
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "traceback": traceback.format_exc()},
+        headers={"Access-Control-Allow-Origin": "*"}
+    )
+
 # Root endpoint
 @app.get("/")
 async def root():
