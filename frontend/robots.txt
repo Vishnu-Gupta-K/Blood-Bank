@@ -1,4 +1,12 @@
-User-agent: *
-Allow: /
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-Sitemap: https://bloodbank.adslive.app/sitemap.xml
+  <url>
+    <loc>https://bloodbank.adslive.app/</loc>
+  </url>
+
+  <url>
+    <loc>https://bloodbank.adslive.app/src/pages/BloodEducation.html</loc>
+  </url>
+
+</urlset>
