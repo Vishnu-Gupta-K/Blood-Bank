@@ -7,7 +7,7 @@ gunicorn==21.2.0
 # Database
 mysql-connector-python==8.2.0
 SQLAlchemy==2.0.54
-psycopg2-binary==2.9.9; sys_platform == 'linux'
+psycopg2-binary==2.9.11; sys_platform == 'linux'
 
 # Authentication
 python-jose[cryptography]==3.3.0
